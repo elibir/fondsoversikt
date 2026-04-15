@@ -1,0 +1,16 @@
+ticker,fund_name,asset_class,category,expense_ratio_pct,aum_usd_bn,dividend_yield_pct
+VTI,Vanguard Total Stock Market ETF,US Equity,Broad Market,0.03,410,1.3
+VOO,Vanguard S&P 500 ETF,US Equity,Large Cap Blend,0.03,520,1.2
+QQQ,Invesco QQQ Trust,US Equity,Large Cap Growth,0.2,260,0.6
+VT,Vanguard Total World Stock ETF,Global Equity,Broad Market,0.07,43,1.8
+VXUS,Vanguard Total International Stock ETF,International Equity,Broad Market ex-US,0.07,85,2.7
+IWM,iShares Russell 2000 ETF,US Equity,Small Cap Blend,0.19,67,1.4
+SCHD,Schwab U.S. Dividend Equity ETF,US Equity,Dividend,0.06,62,3.4
+VTV,Vanguard Value ETF,US Equity,Large Cap Value,0.04,140,2.3
+VUG,Vanguard Growth ETF,US Equity,Large Cap Growth,0.04,165,0.7
+BND,Vanguard Total Bond Market ETF,Fixed Income,US Aggregate Bond,0.03,120,3.6
+AGG,iShares Core U.S. Aggregate Bond ETF,Fixed Income,US Aggregate Bond,0.03,105,3.5
+TIP,iShares TIPS Bond ETF,Fixed Income,Inflation-Protected Bond,0.19,19,3.1
+VNQ,Vanguard Real Estate ETF,Real Estate,REIT,0.12,32,3.8
+XLF,Financial Select Sector SPDR Fund,US Equity,Financials,0.1,42,1.7
+XLK,Technology Select Sector SPDR Fund,US Equity,Technology,0.09,55,0.8

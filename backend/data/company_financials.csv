@@ -1,0 +1,70 @@
+ticker,company_name,sector,revenue_usd_bn,revenue_growth_pct,gross_margin_pct,operating_margin_pct,roe_pct,roic_pct,debt_to_equity,current_ratio,free_cash_flow_margin_pct,interest_coverage,quality_data_completeness_score
+MSFT,Microsoft Corp,Technology,245,15,69,45,37,33,0.4,1.3,32,14,95
+AAPL,Apple Inc,Technology,391,2,45,31,145,58,1.7,0.9,27,12,90
+NVDA,NVIDIA Corp,Technology,122,126,75,57,91,66,0.3,3.5,49,18,92
+AMZN,Amazon.com Inc,Consumer Discretionary,575,12,48,11,24,9,0.9,1.1,9,6,84
+META,Meta Platforms Inc,Communication Services,155,18,81,42,34,30,0.2,2.7,34,16,91
+GOOGL,Alphabet Inc Class A,Communication Services,350,14,57,31,28,26,0.1,2.3,24,15,90
+BRK-B,Berkshire Hathaway Inc Class B,Financials,365,9,0,0,11,9,0.2,0.0,0,0,76
+LLY,Eli Lilly and Co,Healthcare,46,28,80,30,75,41,2.1,1.0,27,12,89
+JPM,JPMorgan Chase & Co,Financials,165,11,0,0,17,0,1.3,0.0,0,0,72
+XOM,Exxon Mobil Corp,Energy,344,6,28,12,22,13,0.2,1.3,11,9,80
+AVGO,Broadcom Inc,Technology,51,34,76,46,39,31,1.6,1.8,30,11,88
+COST,Costco Wholesale Corp,Consumer Staples,254,7,13,4,30,4,0.3,1.0,4,8,82
+NFLX,Netflix Inc,Communication Services,39,11,46,21,30,18,0.7,1.2,16,10,85
+TSLA,Tesla Inc,Consumer Discretionary,110,-8,18,7,18,5,0.2,1.7,6,14,68
+TSM,Taiwan Semiconductor Manufacturing Co Ltd,Technology,76,20,54,42,29,31,0.3,2.2,26,13,90
+NOVO-B,Novo Nordisk A/S,Healthcare,39,31,84,45,88,54,0.5,1.0,39,11,93
+ASML,ASML Holding NV,Technology,31,18,52,33,60,29,0.4,1.5,27,12,89
+NESN,Nestle SA,Consumer Staples,104,5,46,17,28,13,1.1,0.8,12,9,83
+SHEL,Shell plc,Energy,316,4,23,10,16,8,0.4,1.2,7,9,78
+TTE,TotalEnergies SE,Energy,235,3,19,11,18,9,0.5,1.0,8,8,77
+SAP,SAP SE,Technology,36,9,72,27,15,17,0.2,1.1,18,10,86
+BABA,Alibaba Group Holding Ltd,Consumer Discretionary,130,6,38,13,12,9,0.2,1.6,10,12,74
+TM,Toyota Motor Corp,Consumer Discretionary,312,7,20,11,14,7,1.0,1.1,8,8,79
+HSBC,HSBC Holdings plc,Financials,67,5,0,0,14,0,1.5,0.0,0,0,70
+HD,Home Depot Inc,Consumer Discretionary,153,4,33,14,0,36,8.7,1.1,11,10,81
+TXN,Texas Instruments Inc,Technology,18,-9,63,39,29,31,0.8,4.1,30,9,87
+PFE,Pfizer Inc,Healthcare,61,-34,74,18,14,20,0.7,1.1,17,11,73
+PEP,PepsiCo Inc,Consumer Staples,92,5,55,15,51,11,2.0,0.8,10,9,84
+CSCO,Cisco Systems Inc,Technology,54,3,64,28,26,24,0.6,1.2,22,10,86
+KO,Coca-Cola Co,Consumer Staples,46,6,60,23,39,21,1.5,1.0,19,8,85
+MRK,Merck & Co Inc,Healthcare,60,3,77,27,36,22,0.8,1.3,21,10,86
+CVX,Chevron Corp,Energy,201,2,26,12,15,10,0.2,1.2,9,9,79
+AMGN,Amgen Inc,Healthcare,28,4,74,33,129,28,8.4,1.2,24,9,80
+UNH,UnitedHealth Group Inc,Healthcare,371,8,15,9,27,8,0.7,0.8,7,10,82
+JNJ,Johnson & Johnson,Healthcare,87,3,69,24,24,20,0.5,1.1,18,9,85
+PG,Procter & Gamble Co,Consumer Staples,85,4,50,23,32,18,0.7,0.8,17,8,84
+BAC,Bank of America Corp,Financials,100,6,0,0,10,0,1.2,0.0,0,0,69
+WFC,Wells Fargo & Co,Financials,82,5,0,0,11,0,1.1,0.0,0,0,68
+PLD,Prologis Inc,Real Estate,8,7,0,0,7,0,0.5,0.0,0,0,71
+AMT,American Tower Corp,Real Estate,11,5,0,0,0,0,6.4,0.0,0,0,69
+EQIX,Equinix Inc,Real Estate,8,10,0,0,0,0,1.9,0.0,0,0,70
+WELL,Welltower Inc,Real Estate,7,14,0,0,0,0,0.8,0.0,0,0,68
+SPG,Simon Property Group Inc,Real Estate,6,3,0,0,0,0,8.1,0.0,0,0,67
+O,Realty Income Corp,Real Estate,5,4,0,0,0,0,0.7,0.0,0,0,66
+DLR,Digital Realty Trust Inc,Real Estate,6,6,0,0,0,0,1.0,0.0,0,0,67
+PSA,Public Storage,Real Estate,5,5,0,0,0,0,0.2,0.0,0,0,68
+CCI,Crown Castle Inc,Real Estate,7,-2,0,0,0,0,3.9,0.0,0,0,60
+VICI,VICI Properties Inc,Real Estate,4,8,0,0,0,0,0.7,0.0,0,0,69
+GS,Goldman Sachs Group Inc,Financials,52,6,0,0,12,0,2.3,0.0,0,0,70
+MS,Morgan Stanley,Financials,56,5,0,0,13,0,2.6,0.0,0,0,70
+SPGI,S&P Global Inc,Financials,13,8,69,31,22,28,0.3,1.2,26,10,87
+BLK,BlackRock Inc,Financials,20,9,0,0,15,0,0.3,0.0,0,0,71
+C,Citigroup Inc,Financials,79,4,0,0,7,0,1.5,0.0,0,0,66
+AXP,American Express Co,Financials,60,10,0,0,31,0,1.7,0.0,0,0,73
+CRM,Salesforce Inc,Technology,35,11,77,18,11,16,0.2,1.1,17,11,85
+AMD,Advanced Micro Devices Inc,Technology,23,9,51,8,4,6,0.1,2.0,8,15,78
+ORCL,Oracle Corp,Technology,53,7,71,33,102,27,5.5,0.9,25,9,82
+INTU,Intuit Inc,Technology,16,12,79,29,17,24,0.3,1.1,23,10,88
+IBM,International Business Machines Corp,Technology,62,2,56,17,34,13,2.0,0.9,12,8,80
+EME,EMCOR Group Inc,Industrials,14,20,19,9,34,8,0.1,1.2,7,9,79
+FIX,Comfort Systems USA Inc,Industrials,5,24,20,9,31,7,0.1,1.3,6,8,78
+ONTO,Onto Innovation Inc,Technology,1,7,54,31,16,25,0.2,2.1,22,11,84
+SPXC,SPX Technologies Inc,Industrials,2,10,37,14,18,11,0.5,1.7,10,10,76
+FLS,Flowserve Corp,Industrials,4,5,31,11,15,8,0.7,2.0,9,8,74
+RBC,RBC Bearings Inc,Industrials,2,14,42,22,11,18,0.6,2.4,16,9,81
+GPI,Group 1 Automotive Inc,Consumer Discretionary,20,8,17,5,23,4,1.3,1.1,4,8,72
+ATI,ATI Inc,Materials,5,9,21,12,17,8,1.0,1.8,9,8,73
+ANF,Abercrombie & Fitch Co,Consumer Discretionary,5,12,62,16,59,14,0.1,1.6,13,10,77
+MTH,Meritage Homes Corp,Consumer Discretionary,6,6,24,12,17,13,0.2,2.7,12,8,76

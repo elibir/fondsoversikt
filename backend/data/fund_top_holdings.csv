@@ -1,0 +1,121 @@
+fund_ticker,company_ticker,company_name,portfolio_weight_pct
+VTI,MSFT,Microsoft Corp,6.2
+VTI,AAPL,Apple Inc,5.7
+VTI,NVDA,NVIDIA Corp,5.1
+VTI,AMZN,Amazon.com Inc,3.4
+VTI,META,Meta Platforms Inc,2.2
+VTI,GOOGL,Alphabet Inc Class A,1.9
+VTI,BRK-B,Berkshire Hathaway Inc Class B,1.7
+VTI,LLY,Eli Lilly and Co,1.4
+VTI,JPM,JPMorgan Chase & Co,1.2
+VTI,XOM,Exxon Mobil Corp,1.1
+VOO,MSFT,Microsoft Corp,7.0
+VOO,AAPL,Apple Inc,6.4
+VOO,NVDA,NVIDIA Corp,6.0
+VOO,AMZN,Amazon.com Inc,3.8
+VOO,META,Meta Platforms Inc,2.6
+VOO,GOOGL,Alphabet Inc Class A,2.1
+VOO,BRK-B,Berkshire Hathaway Inc Class B,1.8
+VOO,LLY,Eli Lilly and Co,1.6
+VOO,JPM,JPMorgan Chase & Co,1.3
+VOO,XOM,Exxon Mobil Corp,1.2
+QQQ,MSFT,Microsoft Corp,8.8
+QQQ,AAPL,Apple Inc,8.1
+QQQ,NVDA,NVIDIA Corp,7.6
+QQQ,AMZN,Amazon.com Inc,5.7
+QQQ,META,Meta Platforms Inc,4.3
+QQQ,GOOGL,Alphabet Inc Class A,3.9
+QQQ,AVGO,Broadcom Inc,3.6
+QQQ,COST,Costco Wholesale Corp,2.8
+QQQ,NFLX,Netflix Inc,2.4
+QQQ,TSLA,Tesla Inc,2.2
+VT,MSFT,Microsoft Corp,3.1
+VT,AAPL,Apple Inc,2.8
+VT,NVDA,NVIDIA Corp,2.5
+VT,AMZN,Amazon.com Inc,1.8
+VT,TSM,Taiwan Semiconductor Manufacturing Co Ltd,1.4
+VT,META,Meta Platforms Inc,1.2
+VT,NOVO-B,Novo Nordisk A/S,0.9
+VT,ASML,ASML Holding NV,0.8
+VT,JPM,JPMorgan Chase & Co,0.8
+VT,NESN,Nestle SA,0.7
+VXUS,TSM,Taiwan Semiconductor Manufacturing Co Ltd,1.9
+VXUS,NOVO-B,Novo Nordisk A/S,1.4
+VXUS,ASML,ASML Holding NV,1.3
+VXUS,NESN,Nestle SA,1.1
+VXUS,SHEL,Shell plc,1.0
+VXUS,TTE,TotalEnergies SE,0.9
+VXUS,SAP,SAP SE,0.9
+VXUS,BABA,Alibaba Group Holding Ltd,0.8
+VXUS,TM,Toyota Motor Corp,0.8
+VXUS,HSBC,HSBC Holdings plc,0.7
+IWM,EME,EMCOR Group Inc,0.5
+IWM,FIX,Comfort Systems USA Inc,0.5
+IWM,ONTO,Onto Innovation Inc,0.4
+IWM,SPXC,SPX Technologies Inc,0.4
+IWM,FLS,Flowserve Corp,0.4
+IWM,RBC,RBC Bearings Inc,0.4
+IWM,GPI,Group 1 Automotive Inc,0.4
+IWM,ATI,ATI Inc,0.4
+IWM,ANF,Abercrombie & Fitch Co,0.4
+IWM,MTH,Meritage Homes Corp,0.4
+SCHD,HD,Home Depot Inc,4.5
+SCHD,TXN,Texas Instruments Inc,4.2
+SCHD,PFE,Pfizer Inc,4.0
+SCHD,PEP,PepsiCo Inc,3.8
+SCHD,CSCO,Cisco Systems Inc,3.6
+SCHD,KO,Coca-Cola Co,3.4
+SCHD,MRK,Merck & Co Inc,3.3
+SCHD,AVGO,Broadcom Inc,3.2
+SCHD,CVX,Chevron Corp,3.1
+SCHD,AMGN,Amgen Inc,3.0
+VTV,BRK-B,Berkshire Hathaway Inc Class B,3.7
+VTV,JPM,JPMorgan Chase & Co,3.0
+VTV,XOM,Exxon Mobil Corp,2.6
+VTV,UNH,UnitedHealth Group Inc,2.4
+VTV,JNJ,Johnson & Johnson,2.3
+VTV,PG,Procter & Gamble Co,2.1
+VTV,CVX,Chevron Corp,2.0
+VTV,BAC,Bank of America Corp,1.8
+VTV,WFC,Wells Fargo & Co,1.6
+VTV,KO,Coca-Cola Co,1.5
+VUG,MSFT,Microsoft Corp,10.2
+VUG,AAPL,Apple Inc,8.9
+VUG,NVDA,NVIDIA Corp,8.0
+VUG,AMZN,Amazon.com Inc,5.9
+VUG,META,Meta Platforms Inc,4.1
+VUG,GOOGL,Alphabet Inc Class A,3.7
+VUG,LLY,Eli Lilly and Co,3.4
+VUG,AVGO,Broadcom Inc,3.0
+VUG,TSLA,Tesla Inc,2.2
+VUG,NFLX,Netflix Inc,1.8
+VNQ,PLD,Prologis Inc,7.5
+VNQ,AMT,American Tower Corp,7.0
+VNQ,EQIX,Equinix Inc,6.8
+VNQ,WELL,Welltower Inc,4.5
+VNQ,SPG,Simon Property Group Inc,4.0
+VNQ,O,Realty Income Corp,3.8
+VNQ,DLR,Digital Realty Trust Inc,3.7
+VNQ,PSA,Public Storage,3.4
+VNQ,CCI,Crown Castle Inc,3.0
+VNQ,VICI,VICI Properties Inc,2.8
+XLF,BRK-B,Berkshire Hathaway Inc Class B,14.0
+XLF,JPM,JPMorgan Chase & Co,9.8
+XLF,BAC,Bank of America Corp,7.5
+XLF,WFC,Wells Fargo & Co,4.8
+XLF,GS,Goldman Sachs Group Inc,2.9
+XLF,MS,Morgan Stanley,2.7
+XLF,SPGI,S&P Global Inc,2.4
+XLF,BLK,BlackRock Inc,2.3
+XLF,C,Citigroup Inc,2.2
+XLF,AXP,American Express Co,2.0
+XLK,MSFT,Microsoft Corp,22.0
+XLK,AAPL,Apple Inc,20.0
+XLK,NVDA,NVIDIA Corp,7.0
+XLK,AVGO,Broadcom Inc,5.5
+XLK,CRM,Salesforce Inc,3.0
+XLK,AMD,Advanced Micro Devices Inc,2.8
+XLK,ORCL,Oracle Corp,2.6
+XLK,CSCO,Cisco Systems Inc,2.4
+XLK,INTU,Intuit Inc,2.2
+XLK,IBM,International Business Machines Corp,2.0

@@ -1,0 +1,93 @@
+ticker,sector,weight_pct
+VTI,Technology,28
+VTI,Financials,13
+VTI,Healthcare,12
+VTI,Industrials,10
+VTI,Consumer,15
+VTI,Energy,4
+VTI,Utilities,2
+VTI,Real Estate,3
+VOO,Technology,31
+VOO,Financials,12
+VOO,Healthcare,12
+VOO,Industrials,9
+VOO,Consumer,16
+VOO,Energy,4
+VOO,Utilities,2
+VOO,Real Estate,2
+QQQ,Technology,51
+QQQ,Healthcare,7
+QQQ,Industrials,4
+QQQ,Consumer,28
+QQQ,Utilities,1
+VT,Technology,24
+VT,Financials,14
+VT,Healthcare,10
+VT,Industrials,10
+VT,Consumer,13
+VT,Energy,4
+VT,Utilities,2
+VT,Real Estate,2
+VT,International Developed,16
+VT,Emerging Markets,5
+VXUS,Technology,14
+VXUS,Financials,18
+VXUS,Healthcare,9
+VXUS,Industrials,12
+VXUS,Consumer,13
+VXUS,Energy,5
+VXUS,Utilities,3
+VXUS,Real Estate,2
+VXUS,International Developed,18
+VXUS,Emerging Markets,6
+IWM,Technology,16
+IWM,Financials,19
+IWM,Healthcare,14
+IWM,Industrials,16
+IWM,Consumer,18
+IWM,Energy,6
+IWM,Utilities,3
+IWM,Real Estate,4
+SCHD,Technology,10
+SCHD,Financials,18
+SCHD,Healthcare,15
+SCHD,Industrials,12
+SCHD,Consumer,16
+SCHD,Energy,9
+SCHD,Utilities,8
+SCHD,Real Estate,2
+VTV,Technology,10
+VTV,Financials,20
+VTV,Healthcare,16
+VTV,Industrials,13
+VTV,Consumer,14
+VTV,Energy,7
+VTV,Utilities,4
+VTV,Real Estate,3
+VUG,Technology,38
+VUG,Financials,6
+VUG,Healthcare,10
+VUG,Industrials,7
+VUG,Consumer,28
+VUG,Energy,1
+VUG,Utilities,1
+VUG,Real Estate,1
+BND,Government Bonds,46
+BND,Corporate Bonds,40
+AGG,Government Bonds,43
+AGG,Corporate Bonds,42
+TIP,Government Bonds,89
+TIP,Corporate Bonds,5
+VNQ,Real Estate,91
+VNQ,Technology,2
+VNQ,Financials,3
+VNQ,Utilities,2
+XLF,Financials,94
+XLF,Technology,2
+XLF,Industrials,1
+XLF,Consumer,1
+XLF,Real Estate,2
+XLK,Technology,95
+XLK,Healthcare,1
+XLK,Industrials,1
+XLK,Consumer,3
