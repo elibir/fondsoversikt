@@ -27,16 +27,6 @@ jobs:
       - name: Remove node_modules after build
         run: rm -rf frontend/node_modules
 
-      - name: Set up Python
-        uses: actions/setup-python@v5
-        with:
-          python-version: '3.12'
-
-      - name: Install Python dependencies into antenv
-        run: |
-          python -m venv antenv
-          antenv/bin/pip install -r requirements.txt
-
       - name: Deploy to Azure Web App
         uses: azure/webapps-deploy@v3
         with:
