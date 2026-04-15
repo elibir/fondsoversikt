@@ -13,8 +13,8 @@ Et beslutningsstøtteverktøy for rangering og sammenligning av fond.
 ### 1. Backend
 
 ```bash
-cd backend
 pip install -r requirements.txt
+cd backend
 uvicorn main:app --reload
 ```
 
@@ -97,6 +97,10 @@ az webapp up --name fondsoversikt-app --resource-group fondsoversikt-rg
 ```
 
 ### GitHub Actions (CI/CD)
-Last ned publish profile fra Azure Portal → App Service → "Get publish profile".  
-Legg til som GitHub Secret: `AZURE_WEBAPP_PUBLISH_PROFILE`.  
-En workflow-fil ligger i `.github/workflows/deploy.yml`.
+Push til `main` trigger automatisk build og deploy via `.github/workflows/deploy.yml`.
+
+Forutsetninger:
+1. Last ned publish profile fra Azure Portal → App Service → **Download publish profile**
+2. Legg til som GitHub Secret: `AZURE_WEBAPP_PUBLISH_PROFILE`
+
+Workflow bygger React-frontenden, og lar Azure Oryx installere Python-avhengigheter fra `requirements.txt` i roten.
