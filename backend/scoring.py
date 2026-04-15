@@ -5,11 +5,47 @@ from typing import Optional
 
 DATA_DIR = os.path.join(os.path.dirname(__file__), "data")
 
+NUMERIC_FUND_COLS = ["expense_ratio_pct", "aum_usd_bn", "dividend_yield_pct"]
+NUMERIC_METRIC_COLS = [
+    "ytd_return_pct", "return_1y_pct", "return_3y_ann_pct",
+    "volatility_1y_pct", "max_drawdown_1y_pct", "expense_ratio_pct",
+    "aum_usd_bn", "dividend_yield_pct", "data_completeness_score",
+]
+COMPLETENESS_FIELDS = ["return_1y_pct", "return_3y_ann_pct", "volatility_1y_pct", "expense_ratio_pct"]
 
-def load_data() -> tuple[pd.DataFrame, pd.DataFrame]:
+
+def load_data() -> pd.DataFrame:
     funds = pd.read_csv(os.path.join(DATA_DIR, "funds.csv"))
     metrics = pd.read_csv(os.path.join(DATA_DIR, "fund_metrics.csv"))
-    return funds, metrics
+
+    # Fill missing string metadata so downstream str operations don't crash
+    STRING_FUND_COLS = ["fund_name", "asset_class", "category"]
+    for col in STRING_FUND_COLS:
+        if col in funds.columns:
+            funds[col] = funds[col].fillna("").astype(str).str.strip()
+
+    # Coerce numeric columns — invalid values become NaN instead of crashing
+    for col in NUMERIC_FUND_COLS:
+        if col in funds.columns:
+            funds[col] = pd.to_numeric(funds[col], errors="coerce")
+    for col in NUMERIC_METRIC_COLS:
+        if col in metrics.columns:
+            metrics[col] = pd.to_numeric(metrics[col], errors="coerce")
+
+    # Drop duplicate columns from funds before merging (metrics is authoritative)
+    funds = funds.drop(columns=["expense_ratio_pct", "aum_usd_bn", "dividend_yield_pct"], errors="ignore")
+
+    merged = funds.merge(metrics, on="ticker", how="left")
+
+    # Compute data completeness — use CSV score if available, fall back to fraction of non-null scoring fields
+    if "data_completeness_score" in merged.columns:
+        merged["_completeness"] = (merged["data_completeness_score"] / 100).fillna(
+            merged[COMPLETENESS_FIELDS].notna().mean(axis=1)
+        )
+    else:
+        merged["_completeness"] = merged[COMPLETENESS_FIELDS].notna().mean(axis=1)
+
+    return merged
 
 
 def normalize(series: pd.Series, invert: bool = False) -> pd.Series:
@@ -37,12 +73,7 @@ def compute_rankings(
     sort_by: Optional[str] = None,
     sort_dir: str = "desc",
 ) -> list[dict]:
-    funds_df, metrics_df = load_data()
-
-    # Drop columns from funds that also exist in metrics to avoid merge conflicts
-    funds_df = funds_df.drop(columns=["expense_ratio_pct", "aum_usd_bn", "dividend_yield_pct"], errors="ignore")
-
-    merged = funds_df.merge(metrics_df, on="ticker", how="left")
+    merged = load_data()
 
     # Apply filters
     if asset_class_filter:
@@ -66,30 +97,22 @@ def compute_rankings(
     # Factor 2: Risk score (35%) — lower volatility = better
     # Factor 3: Cost score (25%) — lower expense ratio = better
     score_cols = {
-        "return": ("_best_return",       False, 0.40),
-        "risk":   ("volatility_1y_pct",  True,  0.35),
-        "cost":   ("expense_ratio_pct",  True,  0.25),
+        "return": ("_best_return",      False, 0.40),
+        "risk":   ("volatility_1y_pct", True,  0.35),
+        "cost":   ("expense_ratio_pct", True,  0.25),
     }
 
     for factor, (col, invert, _) in score_cols.items():
-        valid = merged[col].dropna()
-        if len(valid) > 0:
-            merged[f"_score_{factor}"] = normalize(merged[col], invert=invert)
+        if merged[col].dropna().empty:
+            merged[f"_score_{factor}"] = 50.0
         else:
-            merged[f"_score_{factor}"] = 50.0  # neutral fallback
+            merged[f"_score_{factor}"] = normalize(merged[col], invert=invert)
 
     merged["total_score"] = (
         merged["_score_return"].fillna(50) * 0.40
         + merged["_score_risk"].fillna(50) * 0.35
         + merged["_score_cost"].fillna(50) * 0.25
     )
-
-    # Data completeness — use CSV score if available, else compute from key metric fields
-    metric_fields = ["return_1y_pct", "return_3y_ann_pct", "volatility_1y_pct", "expense_ratio_pct"]
-    if "data_completeness_score" in merged.columns:
-        merged["_completeness"] = merged["data_completeness_score"] / 100
-    else:
-        merged["_completeness"] = merged[metric_fields].notna().mean(axis=1)
 
     # Sort
     if sort_by == "name":
@@ -108,6 +131,9 @@ def compute_rankings(
     def get(row, col):
         val = row.get(col)
         return val if pd.notna(val) else None
+
+    def safe_score(val):
+        return round(float(val) if pd.notna(val) else 50, 1)
 
     results = []
     for i, row in merged.iterrows():
@@ -131,14 +157,14 @@ def compute_rankings(
                 "dividend_yield_pct": get(row, "dividend_yield_pct"),
                 "data_completeness_score": get(row, "data_completeness_score"),
             },
-            "total_score": round(float(row["total_score"]), 1),
+            "total_score": safe_score(row["total_score"]),
             "score_breakdown": {
-                "return_score": round(float(row["_score_return"]) if pd.notna(row["_score_return"]) else 50, 1),
-                "risk_score": round(float(row["_score_risk"]) if pd.notna(row["_score_risk"]) else 50, 1),
-                "cost_score": round(float(row["_score_cost"]) if pd.notna(row["_score_cost"]) else 50, 1),
-                "label_return": score_label(row["_score_return"] if pd.notna(row["_score_return"]) else 50),
-                "label_risk": score_label(row["_score_risk"] if pd.notna(row["_score_risk"]) else 50),
-                "label_cost": score_label(row["_score_cost"] if pd.notna(row["_score_cost"]) else 50),
+                "return_score": safe_score(row["_score_return"]),
+                "risk_score": safe_score(row["_score_risk"]),
+                "cost_score": safe_score(row["_score_cost"]),
+                "label_return": score_label(safe_score(row["_score_return"])),
+                "label_risk": score_label(safe_score(row["_score_risk"])),
+                "label_cost": score_label(safe_score(row["_score_cost"])),
             },
             "data_completeness": round(float(row["_completeness"]), 2),
         })
@@ -147,8 +173,8 @@ def compute_rankings(
 
 
 def get_filter_options() -> dict:
-    funds_df, _ = load_data()
+    merged = load_data()
     return {
-        "asset_classes": sorted(funds_df["asset_class"].dropna().unique().tolist()),
-        "categories": sorted(funds_df["category"].dropna().unique().tolist()),
+        "asset_classes": sorted(merged["asset_class"].dropna().unique().tolist()),
+        "categories": sorted(merged["category"].dropna().unique().tolist()),
     }
