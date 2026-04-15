@@ -132,6 +132,7 @@ function FundCard({ item, expanded, onToggle }) {
             <MetricCell label="Forvaltningsgebyr" value={metrics.expense_ratio_pct} unit="%" />
             <MetricCell label="AUM (mrd. USD)" value={metrics.aum_usd_bn} />
             <MetricCell label="Dividendeavkastning" value={metrics.dividend_yield_pct} unit="%" />
+            <MetricCell label="Sharpe ratio (1 år)" value={metrics.sharpe_ratio_1y} />
           </div>
         </div>
       )}

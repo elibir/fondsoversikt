@@ -20,6 +20,7 @@ class FundMetrics(BaseModel):
     aum_usd_bn: Optional[float] = None
     dividend_yield_pct: Optional[float] = None
     data_completeness_score: Optional[int] = None
+    sharpe_ratio_1y: Optional[float] = None
 
 
 class ScoreBreakdown(BaseModel):

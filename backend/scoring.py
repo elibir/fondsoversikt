@@ -37,6 +37,15 @@ def load_data() -> pd.DataFrame:
 
     merged = funds.merge(metrics, on="ticker", how="left")
 
+    # Compute Sharpe ratio — (1y return - risk-free rate) / 1y volatility
+    RISK_FREE_RATE = 4.5
+    has_both = merged["return_1y_pct"].notna() & merged["volatility_1y_pct"].notna() & (merged["volatility_1y_pct"] != 0)
+    merged["sharpe_ratio_1y"] = np.where(
+        has_both,
+        ((merged["return_1y_pct"] - RISK_FREE_RATE) / merged["volatility_1y_pct"]).round(2),
+        np.nan,
+    )
+
     # Compute data completeness — use CSV score if available, fall back to fraction of non-null scoring fields
     if "data_completeness_score" in merged.columns:
         merged["_completeness"] = (merged["data_completeness_score"] / 100).fillna(
@@ -156,6 +165,7 @@ def compute_rankings(
                 "aum_usd_bn": get(row, "aum_usd_bn"),
                 "dividend_yield_pct": get(row, "dividend_yield_pct"),
                 "data_completeness_score": get(row, "data_completeness_score"),
+                "sharpe_ratio_1y": get(row, "sharpe_ratio_1y"),
             },
             "total_score": safe_score(row["total_score"]),
             "score_breakdown": {
