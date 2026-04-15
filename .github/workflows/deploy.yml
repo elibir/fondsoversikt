@@ -2,7 +2,7 @@ name: Build and Deploy to Azure
 
 on:
   push:
-    branches: [main]
+    branches: [feat/azure-deploy]
   workflow_dispatch:
 
 jobs:
@@ -28,10 +28,6 @@ jobs:
         uses: actions/setup-python@v5
         with:
           python-version: '3.13'
-
-      - name: Install Python dependencies
-        working-directory: backend
-        run: pip install -r requirements.txt
 
       - name: Deploy to Azure Web App
         uses: azure/webapps-deploy@v3
