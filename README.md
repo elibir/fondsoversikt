@@ -5,7 +5,7 @@ Et beslutningsstøtteverktøy for rangering og sammenligning av fond.
 ## Kom i gang lokalt
 
 ### Forutsetninger
-- Python 3.10+ (pyenv anbefalt)
+- Python 3.10+ 
 - Node.js 18+
 
 ---
@@ -52,8 +52,8 @@ Scoren beregnes fra tre faktorer, alle normalisert til 0–100:
 
 ## Datafiler brukt
 
-- `funds.csv` – fondsmetadata (navn, kategori, forvalter)
-- `fund_metrics.csv` – nøkkeltall (avkastning, volatilitet, gebyr, Sharpe)
+- `funds.csv` – fondsmetadata (navn, kategori, kostnader osv.)
+- `fund_metrics.csv` – nøkkeltall (avkastning, volatilitet osv.)
 
 Følgende filer er ikke inkludert i MVP-en, men kan utvide scoren:
 - `fund_prices_monthly.csv` – for beregning av egne avkastningstall

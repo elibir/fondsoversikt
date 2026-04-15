@@ -1,11 +1,12 @@
 from fastapi import APIRouter, Query
 from typing import Optional
-from services.scoring import compute_rankings, get_filter_options
+from scoring import compute_rankings, get_filter_options
+from models import RankedFund, FilterOptions
 
 router = APIRouter()
 
 
-@router.get("/funds")
+@router.get("/funds", response_model=list[RankedFund])
 def get_funds(
     asset_class: Optional[str] = Query(None),
     category: Optional[str] = Query(None),
@@ -20,6 +21,6 @@ def get_funds(
     )
 
 
-@router.get("/filters")
+@router.get("/filters", response_model=FilterOptions)
 def get_filters():
     return get_filter_options()

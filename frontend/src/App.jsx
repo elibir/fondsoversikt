@@ -75,7 +75,6 @@ function FundCard({ item, expanded, onToggle }) {
           <div style={{ display: 'flex', gap: 6, flexWrap: 'wrap' }}>
             <Badge text={fund.asset_class} />
             <Badge text={fund.category} />
-            <span style={{ fontSize: 11, color: 'var(--text-muted)', alignSelf: 'center' }}>{fund.manager}</span>
           </div>
         </div>
 
@@ -125,14 +124,14 @@ function FundCard({ item, expanded, onToggle }) {
           {/* Metrics */}
           <div style={{ fontSize: 11, color: 'var(--text-muted)', marginBottom: 8, textTransform: 'uppercase', letterSpacing: '0.08em' }}>Nøkkeltall</div>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(130px, 1fr))', gap: 12 }}>
-            <MetricCell label="Avkastning 1 år" value={metrics.return_1y} unit="%" />
-            <MetricCell label="Avkastning 3 år" value={metrics.return_3y} unit="%" />
-            <MetricCell label="Avkastning 5 år" value={metrics.return_5y} unit="%" />
-            <MetricCell label="Volatilitet 1 år" value={metrics.volatility_1y} unit="%" />
-            <MetricCell label="Sharpe Ratio" value={metrics.sharpe_ratio} />
-            <MetricCell label="Forvaltningsgebyr" value={metrics.expense_ratio} unit="%" />
-            <MetricCell label="AUM (MNOK)" value={metrics.aum_mnok} />
-            <MetricCell label="Antall beholdninger" value={metrics.num_holdings} />
+            <MetricCell label="Avkastning YTD" value={metrics.ytd_return_pct} unit="%" />
+            <MetricCell label="Avkastning 1 år" value={metrics.return_1y_pct} unit="%" />
+            <MetricCell label="Avkastning 3 år" value={metrics.return_3y_ann_pct} unit="%" />
+            <MetricCell label="Volatilitet 1 år" value={metrics.volatility_1y_pct} unit="%" />
+            <MetricCell label="Maks drawdown" value={metrics.max_drawdown_1y_pct} unit="%" />
+            <MetricCell label="Forvaltningsgebyr" value={metrics.expense_ratio_pct} unit="%" />
+            <MetricCell label="AUM (mrd. USD)" value={metrics.aum_usd_bn} />
+            <MetricCell label="Dividendeavkastning" value={metrics.dividend_yield_pct} unit="%" />
           </div>
         </div>
       )}
@@ -242,10 +241,10 @@ export default function App() {
       )}
       {!loading && !error && funds.map(item => (
         <FundCard
-          key={item.fund.fund_id}
+          key={item.fund.ticker}
           item={item}
-          expanded={expanded === item.fund.fund_id}
-          onToggle={() => setExpanded(prev => prev === item.fund.fund_id ? null : item.fund.fund_id)}
+          expanded={expanded === item.fund.ticker}
+          onToggle={() => setExpanded(prev => prev === item.fund.ticker ? null : item.fund.ticker)}
         />
       ))}
     </div>

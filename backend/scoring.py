@@ -3,7 +3,7 @@ import numpy as np
 import os
 from typing import Optional
 
-DATA_DIR = os.path.join(os.path.dirname(__file__), "..", "data")
+DATA_DIR = os.path.join(os.path.dirname(__file__), "data")
 
 
 def load_data() -> tuple[pd.DataFrame, pd.DataFrame]:

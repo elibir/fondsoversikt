@@ -38,3 +38,8 @@ class RankedFund(BaseModel):
     total_score: float
     score_breakdown: ScoreBreakdown
     data_completeness: float  # 0-1, fraction of metrics present
+
+
+class FilterOptions(BaseModel):
+    asset_classes: list[str]
+    categories: list[str]

@@ -4,7 +4,7 @@ from fastapi.staticfiles import StaticFiles
 from fastapi.responses import FileResponse
 import os
 
-from routers import funds
+import routers
 
 app = FastAPI(title="Fondsoversikt API", version="1.0.0")
 
@@ -16,7 +16,7 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-app.include_router(funds.router, prefix="/api")
+app.include_router(routers.router, prefix="/api")
 
 # Serve built React frontend in production
 frontend_build = os.path.join(os.path.dirname(__file__), "..", "frontend", "dist")
