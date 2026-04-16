@@ -38,29 +38,40 @@ Vite proxyer `/api`-kall til backenden automatisk.
 
 ## Rangeringsalgoritme
 
-Totalscore er en vektet sum av fire faktorer, alle normalisert til 0–100 med min-max på tvers av fondene i utvalget.
+Totalscore er en vektet sum av fire faktorer, alle normalisert til 0–100 med Percentile rank på tvers av fondene i utvalget.
 
 | Faktor          | Vekt | Retning        | Råverdi                  | Datakilde                 |
 |-----------------|------|----------------|--------------------------|---------------------------|
-| Avkastning      | 35%  | Høyere = bedre | 3-årig ann. (fallback 1-årig) | fund_metrics.csv     |
-| Risiko          | 30%  | Lavere = bedre | Volatilitet 1 år         | fund_metrics.csv          |
-| Kostnad         | 20%  | Lavere = bedre | Forvaltningsgebyr        | fund_metrics.csv          |
-| Diversifisering | 15%  | Lavere = bedre | HHI sektorkonsentrasjon  | fund_sector_exposure.csv  |
+| Avkastning      | 50%  | Høyere = bedre | 3-årig ann. (fallback 1-årig) | fund_metrics.csv     |
+| Risiko          | 20%  | Lavere = bedre | Volatilitet 1 år         | fund_metrics.csv          |
+| Kostnad         | 10%  | Lavere = bedre | Forvaltningsgebyr        | fund_metrics.csv          |
+| Diversifisering | 20%  | Lavere = bedre | HHI sektorkonsentrasjon  | fund_sector_exposure.csv  |
 
 Vektene er satt skjønnsmessig, men kan justeres etter brukerens prioriteringer.
 
-### Min-max normalisering
+### Percentile rank-normalisering
 
-Hver råverdi skaleres til $[0, 100]$ relativt til fondsutvalget:
+Scoren til fond $i$ for en gitt faktor beregnes som:
 
-$$s_i = \frac{x_i - x_{\min}}{x_{\max} - x_{\min}} \times 100$$
+$$s_i = \frac{r_i - 1}{N - 1} \times 100$$
+
+der $r_i$ er rangen til fond $i$ blant de $N$ fondene med tilgjengelig data for faktoren (laveste verdi får rang 1). Ved like verdier brukes gjennomsnittlig rang — fire fond som deler plasseringene 12–15 får alle $r_i = 13.5$, og dermed samme score.
 
 For faktorer der lavere er bedre (risiko, kostnad, diversifisering) inverteres scoren: $s_i = 100 - s_i$. Dette sikrer at høyere score alltid er bedre for alle faktorer, og gjør vektene direkte sammenlignbare uavhengig av enhet.
 
+Percentile rank er robust mot utliggere: et fond med ekstrem verdi forskyver kun sin egen rangering, ikke alle andres score.
+
+**Alternativ: min-max-normalisering** skalerer råverdiene lineært til $[0, 100]$:
+
+$$s_i = \frac{x_i - x_{\min}}{x_{\max} - x_{\min}} \times 100$$
+
+Dette bevarer avstanden mellom fondene i absolutt forstand, men er følsom for utliggere — ett fond med avvikende verdi forskyver $x_{\min}$ eller $x_{\max}$ og komprimerer scoren til alle øvrige fond. Implementasjonen er bevart som kommentar i `scoring.py`.
+
 ### Manglende data
 
-Manglende verdier imputeres med medianen av faktoren på tvers av alle fond.
-Median foretrekkes fremfor gjennomsnitt fordi den er robust mot utliggere. Et fond med manglende verdi får en nøytral score relativt til den faktiske fordelingen.
+Fond med manglende verdi for en faktor ekskluderes fra rangeringen for den faktoren og får `NaN` som delscore — ingen imputering. Totalscore beregnes ved å rebalansere vektene til de tilgjengelige faktorene slik at summen alltid blir 1.
+
+Avkastning og volatilitet er obligatoriske: mangler en av disse settes totalscore til 0.
 
 ### HHI — diversifisering
 
@@ -83,6 +94,7 @@ Følgende filer er ikke brukt, men kan utvide scoren:
 ## Antakelser og avgrensninger
 
 - Diversifisering mellom ulike sektorer vektes positivt, uten å ta hensyn til korrelasjon mellom de ulike sektorene - gjort som forenkling for å slippe å bruke ekstern data.
+- Rapportert avkastning antas å være netto etter forvaltningsgebyr og inkludere reinvestert direkteavkastning (total return). Kostnadsfaktoren i scoringen er derfor delvis overlappende med avkastningsfaktoren, men inkluderes som et fremoverskuende signal på fondets løpende kostnadsnivå - i tillegg var den nevnt som en eksempelfaktor i kravspesifikasjonen.
 
 ---
 
@@ -104,11 +116,11 @@ cd frontend && npm run build && cd ..
 # Opprett resource group og App Service
 az group create --name fondsoversikt-rg --location norwayeast
 az appservice plan create --name fondsoversikt-plan --resource-group fondsoversikt-rg --sku F1 --is-linux
-az webapp create --name fondsoversikt-app --resource-group fondsoversikt-rg --plan fondsoversikt-plan --runtime "PYTHON:3.13"
+az webapp create --name fondsoversikt-app --resource-group fondsoversikt-rg --plan fondsoversikt-plan --runtime "PYTHON:3.12"
 
 # Sett startup-kommando
 az webapp config set --resource-group fondsoversikt-rg --name fondsoversikt-app \
-  --startup-file "uvicorn main:app --host 0.0.0.0 --port 8000"
+  --startup-file "python -m uvicorn main:app --host 0.0.0.0 --port 8000"
 
 # Deploy
 az webapp up --name fondsoversikt-app --resource-group fondsoversikt-rg

@@ -170,6 +170,7 @@ export default function App() {
   const [category, setCategory] = useState('')
   const [sortBy, setSortBy] = useState('')
   const [sortDir, setSortDir] = useState('desc')
+  const [showInfo, setShowInfo] = useState(false)
 
   useEffect(() => {
     fetch(`${API}/filters`)
@@ -213,9 +214,46 @@ export default function App() {
           </h1>
           <span style={{ fontSize: 13, color: 'var(--accent)', fontWeight: 500 }}>for kapitalforvaltere</span>
         </div>
-        <p style={{ color: 'var(--text-muted)', fontSize: 13 }}>
-          Rangert etter samlet score basert på historisk avkastning, risiko og kostnad.
-        </p>
+        <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+          <p style={{ color: 'var(--text-muted)', fontSize: 13, margin: 0 }}>
+            Sammenlign og ranger fond basert på historisk avkastning, risiko, kostnad og sektordiversifisering.
+          </p>
+          <button
+            onClick={() => setShowInfo(v => !v)}
+            style={{ flexShrink: 0, background: 'none', border: '1px solid var(--border)', borderRadius: '50%', width: 18, height: 18, cursor: 'pointer', color: 'var(--text-muted)', fontSize: 11, lineHeight: 1, padding: 0 }}
+          >i</button>
+        </div>
+        {showInfo && (
+          <div style={{ marginTop: 12, background: 'var(--bg-card)', border: '1px solid var(--border)', borderRadius: 'var(--radius)', padding: '14px 18px', fontSize: 13, color: 'var(--text-muted)', lineHeight: 1.7, maxWidth: 560 }}>
+            <strong style={{ color: 'var(--text)' }}>Slik beregnes totalscore</strong>
+            <p style={{ marginTop: 8, marginBottom: 8 }}>Hvert fond scores på fire faktorer (0–100). Scoren viser hvor god fondet er <em>relativt til de andre fondene i utvalget</em> — en score på 90 betyr at fondet er bedre enn 90 % av utvalget på den faktoren. For eksempel: et fond med avkastningsscore 85 har høyere historisk avkastning enn 85 % av fondene som vises.</p>
+            <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: 12 }}>
+              <thead>
+                <tr style={{ color: 'var(--text-dim)', textAlign: 'left' }}>
+                  <th style={{ paddingBottom: 4, fontWeight: 500 }}>Faktor</th>
+                  <th style={{ paddingBottom: 4, fontWeight: 500 }}>Vekt</th>
+                  <th style={{ paddingBottom: 4, fontWeight: 500 }}>Hva som er bra</th>
+                </tr>
+              </thead>
+              <tbody>
+                {[
+                  ['Avkastning', '50%', 'Høy 3-årig annualisert avkastning'],
+                  ['Risiko',     '20%', 'Lav volatilitet siste år'],
+                  ['Kostnad',    '10%', 'Lavt forvaltningsgebyr'],
+                  ['Diversifisering', '20%', 'Lav sektorkonsentrasjon (HHI)'],
+                ].map(([f, w, d]) => (
+                  <tr key={f} style={{ borderTop: '1px solid var(--border)' }}>
+                    <td style={{ padding: '5px 0' }}>{f}</td>
+                    <td style={{ padding: '5px 8px' }}>{w}</td>
+                    <td style={{ padding: '5px 0', color: 'var(--text-dim)' }}>{d}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+            <p style={{ marginTop: 10, marginBottom: 4 }}>Totalscore er en vektet sum av faktorscorene. Avkastning teller mest (50 %) fordi det er den viktigste indikatoren for historisk verdiskapning. Risiko og diversifisering teller 20 % hver, mens kostnad teller 10 % — gebyret er allerede delvis reflektert i rapportert avkastning.</p>
+            <p style={{ marginBottom: 0 }}>Mangler avkastning eller volatilitet settes totalscore til 0. Øvrige manglende faktorer ekskluderes og vektene rebalanseres automatisk.</p>
+          </div>
+        )}
       </div>
 
       {/* Controls */}

@@ -59,14 +59,30 @@ def load_data() -> pd.DataFrame:
     return merged
 
 
+# def normalize(series: pd.Series, invert: bool = False) -> pd.Series:
+#     """Min-max normalize a series to 0-100. Invert for metrics where lower is better."""
+#     min_val = series.min()
+#     max_val = series.max()
+#     if max_val == min_val:
+#         return pd.Series([50.0] * len(series), index=series.index)
+#     normalized = (series - min_val) / (max_val - min_val) * 100
+#     return (100 - normalized) if invert else normalized
+
+
 def normalize(series: pd.Series, invert: bool = False) -> pd.Series:
-    """Min-max normalize a series to 0-100. Invert for metrics where lower is better."""
-    min_val = series.min()
-    max_val = series.max()
-    if max_val == min_val:
+    """Percentile-rank normalize a series to [0, 100]. Invert for metrics where lower is better.
+
+    Uses (rank - 1) / (n - 1) so the best fund always scores 100 and the worst 0,
+    regardless of direction. rank(pct=True) alone maps to (1/n … 1), leaving the
+    worst fund at 1/n instead of 0 and causing inverted factors to never reach 100.
+    NaN values are excluded from ranking and remain NaN (no imputation).
+    Robust to outliers: an extreme value shifts only its own rank, not everyone else's.
+    """
+    n = series.notna().sum()
+    if n <= 1:
         return pd.Series([50.0] * len(series), index=series.index)
-    normalized = (series - min_val) / (max_val - min_val) * 100
-    return (100 - normalized) if invert else normalized
+    ranked = (series.rank(method="average", na_option="keep") - 1) / (n - 1) * 100
+    return (100 - ranked) if invert else ranked
 
 
 
@@ -99,9 +115,9 @@ def compute_rankings(
 
     SCORE_FACTORS = {
         "return":          {"col": "_best_return",      "invert": False, "weight": 0.5},
-        "risk":            {"col": "volatility_1y_pct", "invert": True,  "weight": 0.2},
+        "risk":            {"col": "volatility_1y_pct", "invert": True,  "weight": 0.20},
         "cost":            {"col": "expense_ratio_pct", "invert": True,  "weight": 0.1},
-        "diversification": {"col": "_hhi",              "invert": True,  "weight": 0.2},
+        "diversification": {"col": "_hhi",              "invert": True,  "weight": 0.20},
     }
 
     for factor, f in SCORE_FACTORS.items():
