@@ -122,12 +122,21 @@ function FundCard({ item, expanded, onToggle }) {
               <ScorePill label="Diversifisering" value={score_breakdown.diversification_score} />
             </div>
             <div style={{ marginTop: 10, fontSize: 12, color: 'var(--text-muted)', lineHeight: 1.7 }}>
-              {missing_factors.some(f => CORE_FACTORS.includes(f))
-                ? <div>ℹ️ <strong>Score kunne ikke beregnes</strong> – avkastning eller volatilitet mangler</div>
-                : missing_factors.filter(f => !CORE_FACTORS.includes(f)).map(f =>
-                    <div key={f}>ℹ️ <strong>{FACTOR_LABELS[f]}</strong> – mangler data, ikke inkludert i score</div>
-                  )
-              }
+              {missing_factors.some(f => CORE_FACTORS.includes(f)) && <div>ℹ️ <strong>Totalscore kunne ikke beregnes</strong> – avkastning eller volatilitet mangler</div>}
+
+              {score_breakdown.return_score >= SCORE_HIGH && <div>✅ <strong>Høy historisk avkastning</strong></div>}
+              {score_breakdown.return_score != null && score_breakdown.return_score < SCORE_MID && <div>⚠️ <strong>Lav historisk avkastning</strong></div>}
+
+              {score_breakdown.risk_score >= SCORE_HIGH && <div>✅ <strong>Lav volatilitet</strong></div>}
+              {score_breakdown.risk_score != null && score_breakdown.risk_score < SCORE_MID && <div>⚠️ <strong>Høy volatilitet</strong></div>}
+
+              {score_breakdown.cost_score >= SCORE_HIGH && <div>✅ <strong>Lav kostnad</strong></div>}
+              {score_breakdown.cost_score != null && score_breakdown.cost_score < SCORE_MID && <div>⚠️ <strong>Høy kostnad</strong></div>}
+              {score_breakdown.cost_score == null && <div>ℹ️ <strong>Kostnad</strong> – mangler data, ikke inkludert i score</div>}
+
+              {score_breakdown.diversification_score >= SCORE_HIGH && <div>✅ <strong>Bred diversifisering</strong></div>}
+              {score_breakdown.diversification_score != null && score_breakdown.diversification_score < SCORE_MID && <div>⚠️ <strong>Konsentrert portefølje</strong></div>}
+              {score_breakdown.diversification_score == null && <div>ℹ️ <strong>Diversifisering</strong> – mangler data, ikke inkludert i score</div>}
             </div>
           </div>
 
@@ -141,7 +150,7 @@ function FundCard({ item, expanded, onToggle }) {
             <MetricCell label="Maks drawdown" value={metrics.max_drawdown_1y_pct} unit="%" />
             <MetricCell label="Forvaltningsgebyr" value={metrics.expense_ratio_pct} unit="%" />
             <MetricCell label="AUM (mrd. USD)" value={metrics.aum_usd_bn} />
-            <MetricCell label="Dividendeavkastning" value={metrics.dividend_yield_pct} unit="%" />
+            <MetricCell label="Direkteavkastning" value={metrics.dividend_yield_pct} unit="%" />
             <MetricCell label="Sharpe ratio (1 år)" value={metrics.sharpe_ratio_1y} />
           </div>
         </div>
