@@ -2,9 +2,12 @@ import { useState, useEffect } from 'react'
 
 const API = '/api'
 
+const SCORE_HIGH = 65
+const SCORE_MID = 40
+
 function ScoreBar({ value, max = 100 }) {
   const pct = Math.round((value / max) * 100)
-  const color = value >= 65 ? 'var(--score-high)' : value >= 40 ? 'var(--score-mid)' : 'var(--score-low)'
+  const color = value >= SCORE_HIGH ? 'var(--score-high)' : value >= SCORE_MID ? 'var(--score-mid)' : 'var(--score-low)'
   return (
     <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
       <div style={{ flex: 1, height: 5, background: 'var(--border)', borderRadius: 3, overflow: 'hidden' }}>
@@ -16,8 +19,8 @@ function ScoreBar({ value, max = 100 }) {
 }
 
 function ScorePill({ label, value }) {
-  const color = value >= 65 ? 'var(--score-high)' : value >= 40 ? 'var(--score-mid)' : 'var(--score-low)'
-  const bg = value >= 65 ? 'rgba(93,189,122,0.1)' : value >= 40 ? 'rgba(232,169,74,0.1)' : 'rgba(224,92,92,0.1)'
+  const color = value >= SCORE_HIGH ? 'var(--score-high)' : value >= SCORE_MID ? 'var(--score-mid)' : 'var(--score-low)'
+  const bg = value >= SCORE_HIGH ? 'rgba(93,189,122,0.1)' : value >= SCORE_MID ? 'rgba(232,169,74,0.1)' : 'rgba(224,92,92,0.1)'
   return (
     <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', background: bg, border: `1px solid ${color}30`, borderRadius: 8, padding: '6px 12px', minWidth: 72 }}>
       <span style={{ fontSize: 11, color: 'var(--text-muted)', marginBottom: 2 }}>{label}</span>
@@ -80,7 +83,7 @@ function FundCard({ item, expanded, onToggle }) {
 
         {/* Score */}
         <div style={{ textAlign: 'right', minWidth: 80 }}>
-          <div style={{ fontSize: 24, fontFamily: 'var(--font-display)', color: total_score >= 65 ? 'var(--score-high)' : total_score >= 40 ? 'var(--score-mid)' : 'var(--score-low)' }}>
+          <div style={{ fontSize: 24, fontFamily: 'var(--font-display)', color: total_score >= SCORE_HIGH ? 'var(--score-high)' : total_score >= SCORE_MID ? 'var(--score-mid)' : 'var(--score-low)' }}>
             {total_score}
           </div>
           <div style={{ fontSize: 10, color: 'var(--text-muted)', marginTop: -2 }}>totalscore</div>
@@ -111,12 +114,12 @@ function FundCard({ item, expanded, onToggle }) {
               <ScorePill label="Kostnad" value={score_breakdown.cost_score} />
             </div>
             <div style={{ marginTop: 10, fontSize: 12, color: 'var(--text-muted)', lineHeight: 1.7 }}>
-              {score_breakdown.return_score >= 65 && <div>✅ <strong>Høy avkastning</strong> – over gjennomsnittet historisk</div>}
-              {score_breakdown.return_score < 40 && <div>⚠️ <strong>Lav avkastning</strong> – under gjennomsnittet historisk</div>}
-              {score_breakdown.risk_score >= 65 && <div>✅ <strong>Lav volatilitet</strong> – stabil kursutvikling</div>}
-              {score_breakdown.risk_score < 40 && <div>⚠️ <strong>Høy volatilitet</strong> – stor kurssvingning</div>}
-              {score_breakdown.cost_score >= 65 && <div>✅ <strong>Lav kostnad</strong> – konkurransedyktig forvaltningsgebyr</div>}
-              {score_breakdown.cost_score < 40 && <div>⚠️ <strong>Høy kostnad</strong> – høyt forvaltningsgebyr</div>}
+              {score_breakdown.return_score >= SCORE_HIGH && <div>✅ <strong>Høy avkastning</strong> – over gjennomsnittet historisk</div>}
+              {score_breakdown.return_score < SCORE_MID && <div>⚠️ <strong>Lav avkastning</strong> – under gjennomsnittet historisk</div>}
+              {score_breakdown.risk_score >= SCORE_HIGH && <div>✅ <strong>Lav volatilitet</strong> – stabil kursutvikling</div>}
+              {score_breakdown.risk_score < SCORE_MID && <div>⚠️ <strong>Høy volatilitet</strong> – stor kurssvingning</div>}
+              {score_breakdown.cost_score >= SCORE_HIGH && <div>✅ <strong>Lav kostnad</strong> – konkurransedyktig forvaltningsgebyr</div>}
+              {score_breakdown.cost_score < SCORE_MID && <div>⚠️ <strong>Høy kostnad</strong> – høyt forvaltningsgebyr</div>}
               {data_completeness < 0.8 && <div>ℹ️ <strong>Ufullstendige data</strong> – {Math.round(data_completeness * 100)}% av nøkkeltall tilgjengelig</div>}
             </div>
           </div>
