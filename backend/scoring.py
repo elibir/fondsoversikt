@@ -11,7 +11,6 @@ NUMERIC_METRIC_COLS = [
     "volatility_1y_pct", "max_drawdown_1y_pct", "expense_ratio_pct",
     "aum_usd_bn", "dividend_yield_pct", "data_completeness_score",
 ]
-COMPLETENESS_FIELDS = ["return_1y_pct", "return_3y_ann_pct", "volatility_1y_pct", "expense_ratio_pct"]
 
 
 def load_data() -> pd.DataFrame:
@@ -57,14 +56,6 @@ def load_data() -> pd.DataFrame:
         np.nan,
     )
 
-    # Compute data completeness — use CSV score if available, fall back to fraction of non-null scoring fields
-    if "data_completeness_score" in merged.columns:
-        merged["_completeness"] = (merged["data_completeness_score"] / 100).fillna(
-            merged[COMPLETENESS_FIELDS].notna().mean(axis=1)
-        )
-    else:
-        merged["_completeness"] = merged[COMPLETENESS_FIELDS].notna().mean(axis=1)
-
     return merged
 
 
@@ -107,20 +98,33 @@ def compute_rankings(
     merged["_best_return"] = merged.apply(best_return, axis=1)
 
     SCORE_FACTORS = {
-        "return":          {"col": "_best_return",      "invert": False, "weight": 0.35},
-        "risk":            {"col": "volatility_1y_pct", "invert": True,  "weight": 0.30},
-        "cost":            {"col": "expense_ratio_pct", "invert": True,  "weight": 0.20},
-        "diversification": {"col": "_hhi",              "invert": True,  "weight": 0.15},
+        "return":          {"col": "_best_return",      "invert": False, "weight": 0.5},
+        "risk":            {"col": "volatility_1y_pct", "invert": True,  "weight": 0.2},
+        "cost":            {"col": "expense_ratio_pct", "invert": True,  "weight": 0.1},
+        "diversification": {"col": "_hhi",              "invert": True,  "weight": 0.2},
     }
 
     for factor, f in SCORE_FACTORS.items():
-        scores = normalize(merged[f["col"]], invert=f["invert"])
-        merged[f"_score_{factor}"] = scores.fillna(scores.median())
+        merged[f"_score_{factor}"] = normalize(merged[f["col"]], invert=f["invert"])
 
-    merged["total_score"] = sum(
-        merged[f"_score_{factor}"] * f["weight"]
-        for factor, f in SCORE_FACTORS.items()
-    )
+
+    def compute_score(row):
+        # Return and risk are required — score is meaningless without them
+        if pd.isna(row["_score_return"]) or pd.isna(row["_score_risk"]):
+            return 0.0
+
+        # Sum weighted scores for available factors, reweighting so total weight = 1.0
+        total_weight = 0.0
+        weighted_sum = 0.0
+        for factor, factor_values in SCORE_FACTORS.items():
+            score = row[f"_score_{factor}"]
+            if pd.notna(score):
+                total_weight += factor_values["weight"]
+                weighted_sum += score * factor_values["weight"]
+
+        return weighted_sum / total_weight
+
+    merged["total_score"] = merged.apply(compute_score, axis=1)
 
     # Sort
     if sort_by == "name":
@@ -167,10 +171,10 @@ def compute_rankings(
             },
             "total_score": round(float(row["total_score"]), 1),
             "score_breakdown": {
-                f"{factor}_score": round(float(row[f"_score_{factor}"]), 1)
+                f"{factor}_score": round(float(row[f"_score_{factor}"]), 1) if pd.notna(row[f"_score_{factor}"]) else None
                 for factor in SCORE_FACTORS
             },
-            "data_completeness": round(float(row["_completeness"]), 2),
+            "missing_factors": [f for f in SCORE_FACTORS if pd.isna(row[f"_score_{f}"])],
         })
 
     return results

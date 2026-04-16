@@ -82,9 +82,7 @@ Følgende filer er ikke brukt, men kan utvide scoren:
 
 ## Antakelser og avgrensninger
 
-- Alle avkastningstall er historiske og justert for valuta i kildedataene
-- AUM og antall beholdninger inngår ikke i scoren, men vises informativt
-- Fondene rangeres relativt mot hverandre (ikke mot en absolutt benchmark)
+- Diversifisering mellom ulike sektorer vektes positivt, uten å ta hensyn til korrelasjon mellom de ulike sektorene - gjort som forenkling for å slippe å bruke ekstern data.
 
 ---
 

@@ -47,8 +47,16 @@ function Badge({ text }) {
   )
 }
 
+const FACTOR_LABELS = {
+  return: 'Avkastning',
+  risk: 'Risiko',
+  cost: 'Kostnad',
+  diversification: 'Diversifisering',
+}
+const CORE_FACTORS = ['return', 'risk']
+
 function FundCard({ item, expanded, onToggle }) {
-  const { rank, fund, metrics, total_score, score_breakdown, data_completeness } = item
+  const { rank, fund, metrics, total_score, score_breakdown, missing_factors } = item
   return (
     <div
       style={{
@@ -114,15 +122,12 @@ function FundCard({ item, expanded, onToggle }) {
               <ScorePill label="Diversifisering" value={score_breakdown.diversification_score} />
             </div>
             <div style={{ marginTop: 10, fontSize: 12, color: 'var(--text-muted)', lineHeight: 1.7 }}>
-              {score_breakdown.return_score >= SCORE_HIGH && <div>✅ <strong>Høy avkastning</strong> – over gjennomsnittet historisk</div>}
-              {score_breakdown.return_score < SCORE_MID && <div>⚠️ <strong>Lav avkastning</strong> – under gjennomsnittet historisk</div>}
-              {score_breakdown.risk_score >= SCORE_HIGH && <div>✅ <strong>Lav volatilitet</strong> – stabil kursutvikling</div>}
-              {score_breakdown.risk_score < SCORE_MID && <div>⚠️ <strong>Høy volatilitet</strong> – stor kurssvingning</div>}
-              {score_breakdown.cost_score >= SCORE_HIGH && <div>✅ <strong>Lav kostnad</strong> – konkurransedyktig forvaltningsgebyr</div>}
-              {score_breakdown.cost_score < SCORE_MID && <div>⚠️ <strong>Høy kostnad</strong> – høyt forvaltningsgebyr</div>}
-              {score_breakdown.diversification_score >= SCORE_HIGH && <div>✅ <strong>Bred diversifisering</strong> – lavt sektorkonsentrasjon</div>}
-              {score_breakdown.diversification_score < SCORE_MID && <div>⚠️ <strong>Konsentrert</strong> – høy eksponering mot én sektor</div>}
-              {data_completeness < 0.8 && <div>ℹ️ <strong>Ufullstendige data</strong> – {Math.round(data_completeness * 100)}% av nøkkeltall tilgjengelig</div>}
+              {missing_factors.some(f => CORE_FACTORS.includes(f))
+                ? <div>ℹ️ <strong>Score kunne ikke beregnes</strong> – avkastning eller volatilitet mangler</div>
+                : missing_factors.filter(f => !CORE_FACTORS.includes(f)).map(f =>
+                    <div key={f}>ℹ️ <strong>{FACTOR_LABELS[f]}</strong> – mangler data, ikke inkludert i score</div>
+                  )
+              }
             </div>
           </div>
 

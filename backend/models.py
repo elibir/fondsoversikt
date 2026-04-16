@@ -24,10 +24,10 @@ class FundMetrics(BaseModel):
 
 
 class ScoreBreakdown(BaseModel):
-    return_score: float
-    risk_score: float
-    cost_score: float
-    diversification_score: float
+    return_score: Optional[float] = None
+    risk_score: Optional[float] = None
+    cost_score: Optional[float] = None
+    diversification_score: Optional[float] = None
 
 
 class RankedFund(BaseModel):
@@ -36,7 +36,7 @@ class RankedFund(BaseModel):
     metrics: FundMetrics
     total_score: float
     score_breakdown: ScoreBreakdown
-    data_completeness: float  # 0-1, fraction of metrics present
+    missing_factors: list[str]
 
 
 class FilterOptions(BaseModel):
