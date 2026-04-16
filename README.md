@@ -38,27 +38,47 @@ Vite proxyer `/api`-kall til backenden automatisk.
 
 ## Rangeringsalgoritme
 
-Scoren beregnes fra tre faktorer, alle normalisert til 0–100:
+Totalscore er en vektet sum av fire faktorer, alle normalisert til 0–100 med min-max på tvers av fondene i utvalget.
 
-| Faktor         | Vekt | Retning          | Datakilde          |
-|----------------|------|------------------|--------------------|
-| Avkastning     | 40%  | Høyere = bedre   | fund_metrics.csv   |
-| Volatilitet    | 35%  | Lavere = bedre   | fund_metrics.csv   |
-| Forvaltningsgeb.| 25% | Lavere = bedre   | fund_metrics.csv   |
+| Faktor          | Vekt | Retning        | Råverdi                  | Datakilde                 |
+|-----------------|------|----------------|--------------------------|---------------------------|
+| Avkastning      | 35%  | Høyere = bedre | 3-årig ann. (fallback 1-årig) | fund_metrics.csv     |
+| Risiko          | 30%  | Lavere = bedre | Volatilitet 1 år         | fund_metrics.csv          |
+| Kostnad         | 20%  | Lavere = bedre | Forvaltningsgebyr        | fund_metrics.csv          |
+| Diversifisering | 15%  | Lavere = bedre | HHI sektorkonsentrasjon  | fund_sector_exposure.csv  |
 
-**Normalisering:** Min-max til 0–100 på tvers av alle fond i utvalget.  
-**Manglende data:** Faktoren settes til 50 (nøytralt) dersom verdien mangler.  
-**Avkastning:** 3-årig avkastning brukes som primærverdi; 1-årig eller 5-årig brukes som fallback.
+Vektene er satt skjønnsmessig, men kan justeres etter brukerens prioriteringer.
+
+### Min-max normalisering
+
+Hver råverdi skaleres til $[0, 100]$ relativt til fondsutvalget:
+
+$$s_i = \frac{x_i - x_{\min}}{x_{\max} - x_{\min}} \times 100$$
+
+For faktorer der lavere er bedre (risiko, kostnad, diversifisering) inverteres scoren: $s_i = 100 - s_i$. Dette sikrer at høyere score alltid er bedre for alle faktorer, og gjør vektene direkte sammenlignbare uavhengig av enhet.
+
+### Manglende data
+
+Manglende verdier imputeres med medianen av faktoren på tvers av alle fond.
+Median foretrekkes fremfor gjennomsnitt fordi den er robust mot utliggere. Et fond med manglende verdi får en nøytral score relativt til den faktiske fordelingen.
+
+### HHI — diversifisering
+
+Sektorkonsentrasjon måles med Herfindahl-Hirschman-indeksen:
+
+$$\text{HHI} = \sum_{k=1}^{n} \left(\frac{w_k}{100}\right)^2$$
+
+der $w_k$ er fondets vekt i sektor $k$ i prosent. HHI nærmer seg 0 for et perfekt spredt fond og 1 for et enkeltsektor-fond. Scoren inverteres slik at lavere HHI gir høyere diversifiseringsscore.
 
 ## Datafiler brukt
 
-- `funds.csv` – fondsmetadata (navn, kategori, kostnader osv.)
-- `fund_metrics.csv` – nøkkeltall (avkastning, volatilitet osv.)
+- `funds.csv` – fondsmetadata (navn, kategori osv.)
+- `fund_metrics.csv` – nøkkeltall (avkastning, volatilitet, gebyr osv.)
+- `fund_sector_exposure.csv` – sektorvekter brukt til HHI-beregning
 
-Følgende filer er ikke inkludert i MVP-en, men kan utvide scoren:
-- `fund_prices_monthly.csv` – for beregning av egne avkastningstall
-- `fund_sector_exposure.csv` – diversifiseringsscore
-- `fund_top_holdings.csv` + `company_financials.csv` – kvalitetsscore
+Følgende filer er ikke brukt, men kan utvide scoren:
+- `fund_prices_monthly.csv` – for egne avkastningstall eller momentumfaktor
+- `fund_top_holdings.csv` + `company_financials.csv` – kvalitetsscore på underliggende selskaper
 
 ## Antakelser og avgrensninger
 

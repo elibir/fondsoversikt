@@ -13,7 +13,6 @@ function ScoreBar({ value, max = 100 }) {
       <div style={{ flex: 1, height: 5, background: 'var(--border)', borderRadius: 3, overflow: 'hidden' }}>
         <div style={{ width: `${pct}%`, height: '100%', background: color, borderRadius: 3, transition: 'width 0.6s ease' }} />
       </div>
-      <span style={{ fontSize: 12, color, fontWeight: 500, minWidth: 32, textAlign: 'right' }}>{value}</span>
     </div>
   )
 }
@@ -112,6 +111,7 @@ function FundCard({ item, expanded, onToggle }) {
               <ScorePill label="Avkastning" value={score_breakdown.return_score} />
               <ScorePill label="Risiko" value={score_breakdown.risk_score} />
               <ScorePill label="Kostnad" value={score_breakdown.cost_score} />
+              <ScorePill label="Diversifisering" value={score_breakdown.diversification_score} />
             </div>
             <div style={{ marginTop: 10, fontSize: 12, color: 'var(--text-muted)', lineHeight: 1.7 }}>
               {score_breakdown.return_score >= SCORE_HIGH && <div>✅ <strong>Høy avkastning</strong> – over gjennomsnittet historisk</div>}
@@ -120,6 +120,8 @@ function FundCard({ item, expanded, onToggle }) {
               {score_breakdown.risk_score < SCORE_MID && <div>⚠️ <strong>Høy volatilitet</strong> – stor kurssvingning</div>}
               {score_breakdown.cost_score >= SCORE_HIGH && <div>✅ <strong>Lav kostnad</strong> – konkurransedyktig forvaltningsgebyr</div>}
               {score_breakdown.cost_score < SCORE_MID && <div>⚠️ <strong>Høy kostnad</strong> – høyt forvaltningsgebyr</div>}
+              {score_breakdown.diversification_score >= SCORE_HIGH && <div>✅ <strong>Bred diversifisering</strong> – lavt sektorkonsentrasjon</div>}
+              {score_breakdown.diversification_score < SCORE_MID && <div>⚠️ <strong>Konsentrert</strong> – høy eksponering mot én sektor</div>}
               {data_completeness < 0.8 && <div>ℹ️ <strong>Ufullstendige data</strong> – {Math.round(data_completeness * 100)}% av nøkkeltall tilgjengelig</div>}
             </div>
           </div>
@@ -198,7 +200,7 @@ export default function App() {
           <span style={{ fontSize: 13, color: 'var(--accent)', fontWeight: 500 }}>for kapitalforvaltere</span>
         </div>
         <p style={{ color: 'var(--text-muted)', fontSize: 13 }}>
-          Rangert etter samlet score basert på historisk avkastning (40%), risiko (35%) og kostnad (25%).
+          Rangert etter samlet score basert på historisk avkastning, risiko og kostnad.
         </p>
       </div>
 
@@ -219,6 +221,7 @@ export default function App() {
           <option value="return">Avkastning</option>
           <option value="risk">Risiko</option>
           <option value="cost">Kostnad</option>
+          <option value="diversification">Diversifisering</option>
           <option value="name">Navn</option>
         </select>
 

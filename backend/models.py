@@ -27,9 +27,7 @@ class ScoreBreakdown(BaseModel):
     return_score: float
     risk_score: float
     cost_score: float
-    label_return: str
-    label_risk: str
-    label_cost: str
+    diversification_score: float
 
 
 class RankedFund(BaseModel):

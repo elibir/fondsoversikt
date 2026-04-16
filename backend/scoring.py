@@ -37,6 +37,17 @@ def load_data() -> pd.DataFrame:
 
     merged = funds.merge(metrics, on="ticker", how="left")
 
+    # Compute HHI (Herfindahl-Hirschman Index) — lower = more diversified
+    sector = pd.read_csv(os.path.join(DATA_DIR, "fund_sector_exposure.csv"))
+    sector["weight_pct"] = pd.to_numeric(sector["weight_pct"], errors="coerce")
+    hhi = (
+        sector.groupby("ticker")
+        .apply(lambda g: ((g["weight_pct"] / 100) ** 2).sum())
+        .rename("_hhi")
+        .reset_index()
+    )
+    merged = merged.merge(hhi, on="ticker", how="left")
+
     # Compute Sharpe ratio — (1y return - risk-free rate) / 1y volatility
     RISK_FREE_RATE = 4.5
     has_both = merged["return_1y_pct"].notna() & merged["volatility_1y_pct"].notna() & (merged["volatility_1y_pct"] != 0)
@@ -67,14 +78,6 @@ def normalize(series: pd.Series, invert: bool = False) -> pd.Series:
     return (100 - normalized) if invert else normalized
 
 
-def score_label(score: float) -> str:
-    if score >= 75:
-        return "Høy"
-    elif score >= 40:
-        return "Middels"
-    else:
-        return "Lav"
-
 
 def compute_rankings(
     asset_class_filter: Optional[str] = None,
@@ -94,7 +97,7 @@ def compute_rankings(
         return []
 
     # --- Scoring ---
-    # Factor 1: Return score (40%) — prefer 3y annualised, fall back to 1y
+    # prefer 3y annualised return, fall back to 1y
     def best_return(row):
         for col in ["return_3y_ann_pct", "return_1y_pct"]:
             if pd.notna(row.get(col)):
@@ -103,24 +106,20 @@ def compute_rankings(
 
     merged["_best_return"] = merged.apply(best_return, axis=1)
 
-    # Factor 2: Risk score (35%) — lower volatility = better
-    # Factor 3: Cost score (25%) — lower expense ratio = better
-    score_cols = {
-        "return": ("_best_return",      False, 0.40),
-        "risk":   ("volatility_1y_pct", True,  0.35),
-        "cost":   ("expense_ratio_pct", True,  0.25),
+    SCORE_FACTORS = {
+        "return":          {"col": "_best_return",      "invert": False, "weight": 0.35},
+        "risk":            {"col": "volatility_1y_pct", "invert": True,  "weight": 0.30},
+        "cost":            {"col": "expense_ratio_pct", "invert": True,  "weight": 0.20},
+        "diversification": {"col": "_hhi",              "invert": True,  "weight": 0.15},
     }
 
-    for factor, (col, invert, _) in score_cols.items():
-        if merged[col].dropna().empty:
-            merged[f"_score_{factor}"] = 50.0
-        else:
-            merged[f"_score_{factor}"] = normalize(merged[col], invert=invert)
+    for factor, f in SCORE_FACTORS.items():
+        scores = normalize(merged[f["col"]], invert=f["invert"])
+        merged[f"_score_{factor}"] = scores.fillna(scores.median())
 
-    merged["total_score"] = (
-        merged["_score_return"].fillna(50) * 0.40
-        + merged["_score_risk"].fillna(50) * 0.35
-        + merged["_score_cost"].fillna(50) * 0.25
+    merged["total_score"] = sum(
+        merged[f"_score_{factor}"] * f["weight"]
+        for factor, f in SCORE_FACTORS.items()
     )
 
     # Sort
@@ -132,17 +131,16 @@ def compute_rankings(
         merged = merged.sort_values("volatility_1y_pct", ascending=(sort_dir == "asc"), na_position="last")
     elif sort_by == "cost":
         merged = merged.sort_values("expense_ratio_pct", ascending=(sort_dir == "asc"), na_position="last")
+    elif sort_by == "diversification":
+        merged = merged.sort_values("_hhi", ascending=(sort_dir == "desc"), na_position="last")
     else:
-        merged = merged.sort_values("total_score", ascending=False)
+        merged = merged.sort_values("total_score", ascending=(sort_dir == "asc"))
 
     merged = merged.reset_index(drop=True)
 
     def get(row, col):
         val = row.get(col)
         return val if pd.notna(val) else None
-
-    def safe_score(val):
-        return round(float(val) if pd.notna(val) else 50, 1)
 
     results = []
     for i, row in merged.iterrows():
@@ -167,14 +165,10 @@ def compute_rankings(
                 "data_completeness_score": get(row, "data_completeness_score"),
                 "sharpe_ratio_1y": get(row, "sharpe_ratio_1y"),
             },
-            "total_score": safe_score(row["total_score"]),
+            "total_score": round(float(row["total_score"]), 1),
             "score_breakdown": {
-                "return_score": safe_score(row["_score_return"]),
-                "risk_score": safe_score(row["_score_risk"]),
-                "cost_score": safe_score(row["_score_cost"]),
-                "label_return": score_label(safe_score(row["_score_return"])),
-                "label_risk": score_label(safe_score(row["_score_risk"])),
-                "label_cost": score_label(safe_score(row["_score_cost"])),
+                f"{factor}_score": round(float(row[f"_score_{factor}"]), 1)
+                for factor in SCORE_FACTORS
             },
             "data_completeness": round(float(row["_completeness"]), 2),
         })
