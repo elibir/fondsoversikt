@@ -226,7 +226,7 @@ export default function App() {
         {showInfo && (
           <div style={{ marginTop: 12, background: 'var(--bg-card)', border: '1px solid var(--border)', borderRadius: 'var(--radius)', padding: '14px 18px', fontSize: 13, color: 'var(--text-muted)', lineHeight: 1.7, maxWidth: 560 }}>
             <strong style={{ color: 'var(--text)' }}>Slik beregnes totalscore</strong>
-            <p style={{ marginTop: 8, marginBottom: 8 }}>Hvert fond scores på fire faktorer (0–100). Scoren viser hvor god fondet er <em>relativt til de andre fondene i utvalget</em> — en score på 90 betyr at fondet er bedre enn 90 % av utvalget på den faktoren. For eksempel: et fond med avkastningsscore 85 har høyere historisk avkastning enn 85 % av fondene som vises.</p>
+            <p style={{ marginTop: 8, marginBottom: 8 }}>Totalscore går fra 0-100 og er en vektet sum av faktorscorer. Et fond med en score på 100 vil være bedre enn alle andre fond i utvalget på alle parametre.</p>
             <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: 12 }}>
               <thead>
                 <tr style={{ color: 'var(--text-dim)', textAlign: 'left' }}>
@@ -237,8 +237,8 @@ export default function App() {
               </thead>
               <tbody>
                 {[
-                  ['Avkastning', '50%', 'Høy 3-årig annualisert avkastning'],
-                  ['Risiko',     '20%', 'Lav volatilitet siste år'],
+                  ['Avkastning', '45%', 'Høy 3-årig annualisert avkastning'],
+                  ['Risiko',     '25%', 'Lav volatilitet siste år'],
                   ['Kostnad',    '10%', 'Lavt forvaltningsgebyr'],
                   ['Diversifisering', '20%', 'Lav sektorkonsentrasjon (HHI)'],
                 ].map(([f, w, d]) => (
@@ -250,7 +250,7 @@ export default function App() {
                 ))}
               </tbody>
             </table>
-            <p style={{ marginTop: 10, marginBottom: 4 }}>Totalscore er en vektet sum av faktorscorene. Avkastning teller mest (50 %) fordi det er den viktigste indikatoren for historisk verdiskapning. Risiko og diversifisering teller 20 % hver, mens kostnad teller 10 % — gebyret er allerede delvis reflektert i rapportert avkastning.</p>
+            <p style={{ marginTop: 10, marginBottom: 4 }}>Hvert fond scores på fire faktorer (0–100). Scoren viser hvor god fondet er <em>relativt til de andre fondene i utvalget</em> — en score på 90 betyr at fondet er bedre enn 90 % av utvalget på den faktoren. For eksempel: et fond med avkastningsscore 85 har høyere historisk avkastning enn 85 % av fondene som vises.</p>
             <p style={{ marginBottom: 0 }}>Mangler avkastning eller volatilitet settes totalscore til 0. Øvrige manglende faktorer ekskluderes og vektene rebalanseres automatisk.</p>
           </div>
         )}

@@ -114,9 +114,9 @@ def compute_rankings(
     merged["_best_return"] = merged.apply(best_return, axis=1)
 
     SCORE_FACTORS = {
-        "return":          {"col": "_best_return",      "invert": False, "weight": 0.5},
-        "risk":            {"col": "volatility_1y_pct", "invert": True,  "weight": 0.20},
-        "cost":            {"col": "expense_ratio_pct", "invert": True,  "weight": 0.1},
+        "return":          {"col": "_best_return",      "invert": False, "weight": 0.45},
+        "risk":            {"col": "volatility_1y_pct", "invert": True,  "weight": 0.25},
+        "cost":            {"col": "expense_ratio_pct", "invert": True,  "weight": 0.10},
         "diversification": {"col": "_hhi",              "invert": True,  "weight": 0.20},
     }
 

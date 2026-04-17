@@ -42,8 +42,8 @@ Totalscore er en vektet sum av fire faktorer, alle normalisert til 0–100 med P
 
 | Faktor          | Vekt | Retning        | Råverdi                  | Datakilde                 |
 |-----------------|------|----------------|--------------------------|---------------------------|
-| Avkastning      | 50%  | Høyere = bedre | 3-årig ann. (fallback 1-årig) | fund_metrics.csv     |
-| Risiko          | 20%  | Lavere = bedre | Volatilitet 1 år         | fund_metrics.csv          |
+| Avkastning      | 45%  | Høyere = bedre | 3-årig ann. (fallback 1-årig) | fund_metrics.csv     |
+| Risiko          | 25%  | Lavere = bedre | Volatilitet 1 år         | fund_metrics.csv          |
 | Kostnad         | 10%  | Lavere = bedre | Forvaltningsgebyr        | fund_metrics.csv          |
 | Diversifisering | 20%  | Lavere = bedre | HHI sektorkonsentrasjon  | fund_sector_exposure.csv  |
 
