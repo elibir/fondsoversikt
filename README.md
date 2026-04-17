@@ -102,7 +102,7 @@ Følgende filer er ikke brukt, men kan utvide scoren:
 
 ### Forutsetninger
 - Azure-konto ([gratis prøveperiode](https://azure.microsoft.com/free))
-- Azure CLI installert: `brew install azure-cli`
+- Azure CLI installert: ([How to install the Azure CLI](https://learn.microsoft.com/en-us/cli/azure/install-azure-cli?view=azure-cli-latest))
 
 ### Steg
 
