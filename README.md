@@ -1,6 +1,6 @@
 # Fondsoversikt for kapitalforvaltere
 
-Et beslutningsstøtteverktøy for rangering og sammenligning av fond.
+Et beslutningsstøtteverktøy for rangering og sammenligning av fond. Live på: https://fondsoversikt-app.azurewebsites.net/
 
 ## Kom i gang lokalt
 
